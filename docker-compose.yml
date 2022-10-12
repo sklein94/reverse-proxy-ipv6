@@ -1,10 +1,19 @@
 version: '3'
 services:
-  nodered:
+  mynginx:
     image: nginxinc/nginx-unprivileged
     container_name: mynginx
+    networks:
+      - cesnet1
+
     volumes:
-      - /home/sklein/IdeaProjects/reverse-proxy-ipv6/default.conf:/etc/nginx/conf.d/default.conf
-      - /home/sklein/IdeaProjects/reverse-proxy-ipv6/volumes/certificate:/certificate
+      - /vagrant/containers/reverse-proxy-ipv6/default.conf:/etc/nginx/conf.d/default.conf
+      - /vagrant/containers/reverse-proxy-ipv6/certificate:/certificate
     ports:
-      - "fde4:8dba:82e1::c4:80:8081"
+      - ":::443:443"
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
+
+networks:
+  cesnet1:
+    external: true
